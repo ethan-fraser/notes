@@ -42,7 +42,6 @@
       .collection("users")
       .authWithPassword(email, password)
       .catch((err) => {
-        console.error(err.data);
         passwordError = "Incorrect username or password.";
       });
   }
@@ -63,7 +62,6 @@
       })
       .catch((err) => {
         reset(false, true);
-        console.error(err.data);
         firstNameError = err.data?.data?.firstName?.message ?? "";
         lastNameError = err.data?.data?.lastName?.message ?? "";
         passwordError = err.data?.data?.password?.message ?? "";
