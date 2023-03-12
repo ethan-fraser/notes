@@ -1,0 +1,18 @@
+# /lib/systemd/system/pocketbase.service
+
+[Unit]
+Description = pocketbase
+
+[Service]
+Type           = simple
+User           = root
+Group          = root
+LimitNOFILE    = 4096
+Restart        = always
+RestartSec     = 5s
+StandardOutput = append:/root/pb/errors.log
+StandardError  = append:/root/pb/errors.log
+ExecStart      = /root/pb/pocketbase serve --http="pb.ethanfraser.co.nz:80" --https="pb.ethanfraser.co.nz:443"
+
+[Install]
+WantedBy = multi-user.target
