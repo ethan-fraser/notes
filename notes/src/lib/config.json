@@ -1,0 +1,8 @@
+{
+  "development": {
+    "pocketbase_address": "https://pb.ethanfraser.co.nz/"
+  },
+  "prod": {
+    "pocketbase_address": "localhost:8090"
+  }
+}
