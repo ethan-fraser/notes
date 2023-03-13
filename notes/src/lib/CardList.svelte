@@ -22,7 +22,17 @@
     {#each cards as card}
       <Card text={card.text} tags={card.expand.tags.map((t) => t.tag)} />
     {/each}
+    <Card newCard={true} />
   {:catch err}
     <p>Error: {err.message}</p>
   {/await}
 </section>
+
+<style>
+  .cardSection {
+    display: flex;
+    flex-wrap: 1;
+    width: 100%;
+    height: 100%;
+  }
+</style>
