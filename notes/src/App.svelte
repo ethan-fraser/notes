@@ -4,10 +4,10 @@
 </script>
 
 {#if $currentUser}
-  <div class="header">
+  <header>
     <h1>Notes</h1>
     <Login />
-  </div>
+  </header>
 {:else}
   <div class="login">
     <h1>Notes</h1>
@@ -16,7 +16,7 @@
 {/if}
 
 <style>
-  .header {
+  header {
     width: 90vw;
     margin: 0 auto;
     display: flex;
