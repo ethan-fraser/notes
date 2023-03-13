@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { currentUser } from "./lib/pocketbase";
+  import { currentUser, pb } from "./lib/pocketbase";
   import Login from "./lib/Login.svelte";
   import ItemList from "./lib/ItemList.svelte";
   import NewItemButton from "./lib/NewItemButton.svelte";
+
+  async function getItems() {
+    return await pb.collection("items").getFullList({ sort: "created" });
+  }
 </script>
 
 {#if $currentUser}
@@ -11,7 +15,11 @@
     <Login />
   </header>
   <section>
-    <ItemList />
+    {#await getItems() then items}
+      <ItemList {items} />
+    {:catch error}
+      <p>Error: {error.message}</p>
+    {/await}
   </section>
   <NewItemButton />
 {:else}
