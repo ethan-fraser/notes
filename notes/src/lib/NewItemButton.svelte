@@ -1,18 +1,13 @@
 <script lang="ts">
 </script>
 
-<div class="itemButtonContainer">
-  <button class="itemButton"> + </button>
-</div>
+<button class="itemButton"> + </button>
 
 <style>
-  .itemButtonContainer {
+  .itemButton {
     position: absolute;
     bottom: 50px;
     right: 50px;
-  }
-
-  .itemButton {
     border-radius: 100%;
     display: grid;
     width: 70px;
