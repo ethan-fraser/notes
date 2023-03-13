@@ -5,5 +5,5 @@
 </script>
 
 <div class="card">
-  {text}
+  {text} ({tags})
 </div>
