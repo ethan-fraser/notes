@@ -2,6 +2,7 @@
   import { currentUser } from "./lib/pocketbase";
   import Login from "./lib/Login.svelte";
   import ItemList from "./lib/ItemList.svelte";
+  import NewItemButton from "./lib/NewItemButton.svelte";
 </script>
 
 {#if $currentUser}
@@ -12,6 +13,7 @@
   <section>
     <ItemList />
   </section>
+  <NewItemButton />
 {:else}
   <div class="login">
     <h1>Notes</h1>
