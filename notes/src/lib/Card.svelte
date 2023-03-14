@@ -2,13 +2,33 @@
   export let newCard: boolean = false;
   export let text: string = "";
   export let tags: string[] = [];
-  export let expanded: boolean = false;
+  let expanded: boolean = false;
+
+  function expand() {
+    expanded = true;
+  }
 </script>
 
-{#if newCard}
-  <div class="card newCard"><i class="fa-solid fa-plus" /></div>
+{#if expanded}
+  <div class="card expanded">{text} ({tags})</div>
+{:else if newCard}
+  <div
+    on:click={() => expand()}
+    on:keypress={(e) => {
+      if (e.code === "Space") expand();
+    }}
+    class="card newCard"
+  >
+    <i class="fa-solid fa-plus" />
+  </div>
 {:else}
-  <div class="card">
+  <div
+    on:click={() => expand()}
+    on:keypress={(e) => {
+      if (e.code === "Space") expand();
+    }}
+    class="card"
+  >
     {text} ({tags})
   </div>
 {/if}
@@ -20,10 +40,11 @@
     border: 1px solid rgba(255, 255, 255, 0.87);
     border-radius: 10px;
     text-align: left;
-    padding: 5px;
+    padding: 10px;
     margin: 10px;
     transition: width 0.5s, height 0.5s;
     cursor: pointer;
+    flex-grow: 1;
   }
 
   .card:hover {
@@ -35,5 +56,20 @@
     display: grid;
     place-items: center;
     font-size: 32px;
+  }
+
+  .expanded {
+    height: 99% !important;
+    width: 99% !important;
+    background-color: #242424;
+    cursor: text;
+    padding: 20px !important;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .expanded {
+      color: #213547;
+      background-color: #ffffff;
+    }
   }
 </style>
