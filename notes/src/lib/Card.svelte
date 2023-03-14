@@ -12,7 +12,18 @@
 </script>
 
 {#if expanded}
-  <div class="card expanded">{text} ({tags})</div>
+  <div class="card expanded">
+    <span
+      on:click={() => setSelected(key)}
+      on:keypress={(e) => {
+        if (e.code === "Space") setSelected(key);
+      }}
+      class="closeButton"
+    >
+      <i class="fa-solid fa-x" />
+    </span>
+    {text} ({tags})
+  </div>
 {:else if newCard}
   <div
     on:click={() => setSelected(key)}
@@ -61,11 +72,19 @@
   }
 
   .expanded {
+    position: relative;
     height: 99% !important;
     width: 99% !important;
     background-color: #242424;
     cursor: text;
-    padding: 20px !important;
+    padding: 35px 20px 20px 20px !important;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
   }
 
   @media (prefers-color-scheme: light) {
