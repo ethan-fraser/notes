@@ -2,6 +2,11 @@
   import { pb } from "./pocketbase";
   import Card from "./Card.svelte";
 
+  let newCardKey: number = 0;
+  let allCards: any[] = [];
+  $: newCardKey = allCards.length;
+  let selectedCardKey: number | null = null;
+
   async function getCards() {
     return await pb
       .collection("items")
@@ -13,19 +18,39 @@
         data.filter((record) => {
           return record.expand.tags.filter((t) => t.tag === "card").length > 0;
         })
-      );
+      )
+      .then((filtered) => (allCards = filtered));
   }
+
+  function setSelected(key: number | null) {
+    selectedCardKey = key;
+  }
+
+  getCards();
+
+  $: console.log(selectedCardKey);
 </script>
 
 <section class="cardSection">
-  {#await getCards() then cards}
-    {#each cards as card}
-      <Card text={card.text} tags={card.expand.tags.map((t) => t.tag)} />
+  {#if selectedCardKey !== null}
+    <Card
+      key={null}
+      text={allCards[selectedCardKey].text}
+      tags={allCards[selectedCardKey].expand.tags.map((t) => t.tag)}
+      expanded={true}
+      {setSelected}
+    />
+  {:else}
+    {#each allCards as card, index}
+      <Card
+        key={index}
+        text={card.text}
+        tags={card.expand.tags.map((t) => t.tag)}
+        {setSelected}
+      />
     {/each}
-    <Card newCard={true} />
-  {:catch err}
-    <p>Error: {err.message}</p>
-  {/await}
+    <Card key={newCardKey} newCard={true} {setSelected} />
+  {/if}
 </section>
 
 <style>

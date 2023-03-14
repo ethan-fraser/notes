@@ -1,8 +1,10 @@
 <script lang="ts">
+  export let key: number;
   export let newCard: boolean = false;
   export let text: string = "";
   export let tags: string[] = [];
-  let expanded: boolean = false;
+  export let expanded: boolean = false;
+  export let setSelected: (key: number | null) => void;
 
   function expand() {
     expanded = true;
@@ -13,9 +15,9 @@
   <div class="card expanded">{text} ({tags})</div>
 {:else if newCard}
   <div
-    on:click={() => expand()}
+    on:click={() => setSelected(key)}
     on:keypress={(e) => {
-      if (e.code === "Space") expand();
+      if (e.code === "Space") setSelected(key);
     }}
     class="card newCard"
   >
@@ -23,9 +25,9 @@
   </div>
 {:else}
   <div
-    on:click={() => expand()}
+    on:click={() => setSelected(key)}
     on:keypress={(e) => {
-      if (e.code === "Space") expand();
+      if (e.code === "Space") setSelected(key);
     }}
     class="card"
   >
