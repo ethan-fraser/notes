@@ -6,12 +6,14 @@
   let allCards: any[] = [];
   $: newCardKey = allCards.length;
   let selectedCardKey: number | null = null;
+  let prevSelectedCardKey: number | null = 0;
 
   let updatedCard = {
     text: "",
     tags: [],
   };
-  $: {
+  $: if (selectedCardKey != prevSelectedCardKey) {
+    prevSelectedCardKey = selectedCardKey;
     if (selectedCardKey !== null && selectedCardKey !== newCardKey) {
       updatedCard.text = allCards[selectedCardKey].text;
       updatedCard.tags = allCards[selectedCardKey].expand.tags.map(
@@ -21,6 +23,10 @@
       updatedCard.text = "";
       updatedCard.tags = [];
     }
+  }
+
+  $: {
+    console.log(updatedCard);
   }
 
   async function getCards() {
@@ -43,8 +49,6 @@
   }
 
   getCards();
-
-  $: console.log(selectedCardKey);
 </script>
 
 <section class="cardSection">

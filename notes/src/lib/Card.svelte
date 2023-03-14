@@ -22,7 +22,7 @@
     >
       <i class="fa-solid fa-x" />
     </span>
-    {text} ({tags})
+    <textarea bind:value={text} />
   </div>
 {:else if newCard}
   <div
@@ -81,6 +81,13 @@
     padding: 35px 20px 20px 20px !important;
   }
 
+  @media (prefers-color-scheme: light) {
+    .expanded {
+      color: #213547;
+      background-color: #ffffff;
+    }
+  }
+
   .closeButton {
     position: absolute;
     top: 15px;
@@ -88,10 +95,12 @@
     cursor: pointer;
   }
 
-  @media (prefers-color-scheme: light) {
-    .expanded {
-      color: #213547;
-      background-color: #ffffff;
-    }
+  textarea {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: inherit;
+    resize: none;
   }
 </style>
