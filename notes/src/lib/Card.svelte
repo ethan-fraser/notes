@@ -73,8 +73,9 @@
 
   .expanded {
     position: relative;
-    height: 99% !important;
-    width: 99% !important;
+    height: 100% !important;
+    width: 100% !important;
+    margin-bottom: 0;
     background-color: #242424;
     cursor: text;
     padding: 35px 20px 20px 20px !important;
