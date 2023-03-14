@@ -7,6 +7,22 @@
   $: newCardKey = allCards.length;
   let selectedCardKey: number | null = null;
 
+  let updatedCard = {
+    text: "",
+    tags: [],
+  };
+  $: {
+    if (selectedCardKey !== null && selectedCardKey !== newCardKey) {
+      updatedCard.text = allCards[selectedCardKey].text;
+      updatedCard.tags = allCards[selectedCardKey].expand.tags.map(
+        (t) => t.tag
+      );
+    } else if (selectedCardKey === null) {
+      updatedCard.text = "";
+      updatedCard.tags = [];
+    }
+  }
+
   async function getCards() {
     return await pb
       .collection("items")
@@ -35,8 +51,8 @@
   {#if selectedCardKey !== null}
     <Card
       key={null}
-      text={allCards[selectedCardKey].text}
-      tags={allCards[selectedCardKey].expand.tags.map((t) => t.tag)}
+      bind:text={updatedCard.text}
+      bind:tags={updatedCard.tags}
       expanded={true}
       {setSelected}
     />
