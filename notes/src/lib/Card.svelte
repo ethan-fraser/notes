@@ -5,10 +5,6 @@
   export let tags: string[] = [];
   export let expanded: boolean = false;
   export let setSelected: (key: number | null) => void;
-
-  function expand() {
-    expanded = true;
-  }
 </script>
 
 {#if expanded}
