@@ -12,6 +12,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/lodash": "^4.14.191",
     "svelte": "^3.55.1",
     "svelte-check": "^2.10.3",
     "tslib": "^2.5.0",
@@ -19,6 +20,7 @@
     "vite": "^4.1.0"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "pocketbase": "^0.12.1"
   }
 }
