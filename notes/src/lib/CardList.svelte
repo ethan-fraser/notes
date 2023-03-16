@@ -88,11 +88,13 @@
     prevSelectedCardKey = selectedCardKey;
   }
 
-  $: if (selectedCardKey !== null) {
+  $: {
     if (selectedCardKey < allCards.length) {
       selectedCard = allCards[selectedCardKey];
-    } else {
+    } else if (selectedCard === newCardKey) {
       selectedCard = newCard;
+    } else {
+      selectedCard = null;
     }
   }
 
