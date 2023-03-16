@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pb } from "./pocketbase";
+  import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import lodash from "lodash";
 
@@ -19,16 +19,47 @@
       .catch((err) => console.error(err));
   }
 
-  function updateSelectedCardText() {
-    if (selectedCardKey == null) return;
-    pb.collection("items")
-      .update(allCards[selectedCardKey].id, {
-        text: updatedCard.text,
-      })
-      .then((record) => {
-        allCards[selectedCardKey].text = record.text;
-      })
-      .catch((err) => console.error(err));
+  function updateCardText(cardKey: number | null) {
+    if (cardKey == null) return;
+    if (cardKey < allCards.length) {
+      console.log("updating card " + allCards[cardKey].id);
+      pb.collection("items")
+        .update(allCards[cardKey].id, {
+          text: updatedCard.text,
+        })
+        .then((record) => {
+          console.log(record.text);
+          allCards[cardKey] = { ...allCards[cardKey], text: record.text };
+        })
+        .catch((err) => console.error(err));
+    } else {
+      pb.collection("tags")
+        .getFirstListItem('tag="card"')
+        .then((newCardTag) => {
+          console.log(updatedCard.text);
+          pb.collection("items")
+            .create({
+              user: $currentUser.id,
+              text: updatedCard.text,
+              tags: newCardTag.id,
+            })
+            .then((record) => {
+              console.log("created card " + record.id);
+              allCards = [
+                ...allCards,
+                { ...record, expand: { tags: [newCardTag] } },
+              ];
+            })
+            .catch((err) => {
+              console.error(err);
+              return null;
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+          return null;
+        });
+    }
   }
 
   function setSelected(key: number | null) {
@@ -53,21 +84,24 @@
   };
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
-    prevSelectedCardKey = selectedCardKey;
-    if (selectedCardKey !== null && selectedCardKey !== newCardKey) {
-      updatedCard.text = allCards[selectedCardKey].text;
-      updatedCard.tags = allCards[selectedCardKey].expand.tags.map(
+    if (prevSelectedCardKey !== null && prevSelectedCardKey !== newCardKey) {
+      updatedCard.text = allCards[prevSelectedCardKey].text;
+      updatedCard.tags = allCards[prevSelectedCardKey].expand.tags.map(
         (t) => t.tag
       );
-    } else if (selectedCardKey === null) {
+    } else if (prevSelectedCardKey === null) {
       updatedCard.text = "";
       updatedCard.tags = [];
     }
-  }
-
-  $: if (updatedCard.text !== updatedCard.prevText) {
-    updatedCard.prevText = updatedCard.text;
-    updateSelectedCardText();
+    if (
+      selectedCardKey == null &&
+      prevSelectedCardKey !== null &&
+      updatedCard.text
+    ) {
+      console.log("hi");
+      updateCardText(prevSelectedCardKey);
+    }
+    prevSelectedCardKey = selectedCardKey;
   }
 
   $: if (!lodash.isEqual(updatedCard.tags, updatedCard.prevTags)) {
