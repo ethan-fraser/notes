@@ -25,7 +25,7 @@
       console.log("updating card " + allCards[cardKey].id);
       pb.collection("items")
         .update(allCards[cardKey].id, {
-          text: updatedCard.text,
+          text: allCards[cardKey].text,
         })
         .then((record) => {
           console.log(record.text);
@@ -36,11 +36,11 @@
       pb.collection("tags")
         .getFirstListItem('tag="card"')
         .then((newCardTag) => {
-          console.log(updatedCard.text);
+          console.log(newCard.text);
           pb.collection("items")
             .create({
               user: $currentUser.id,
-              text: updatedCard.text,
+              text: newCard.text,
               tags: newCardTag.id,
             })
             .then((record) => {
@@ -69,45 +69,37 @@
   let newCardKey: number = 0;
   let allCards: any[] = [];
   $: newCardKey = allCards.length;
+  let selectedCard: any;
   let selectedCardKey: number | null = null;
-  let prevSelectedCardKey: number | null = 0;
-  let updatedCard: {
+  let prevSelectedCardKey: number | null = null;
+  let newCard: {
     text: string;
-    prevText: string | null;
     tags: string[];
-    prevTags: string[] | null;
   } = {
     text: "",
-    prevText: null,
     tags: [],
-    prevTags: null,
   };
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
-    if (prevSelectedCardKey !== null && prevSelectedCardKey !== newCardKey) {
-      updatedCard.text = allCards[prevSelectedCardKey].text;
-      updatedCard.tags = allCards[prevSelectedCardKey].expand.tags.map(
-        (t) => t.tag
-      );
-    } else if (prevSelectedCardKey === null) {
-      updatedCard.text = "";
-      updatedCard.tags = [];
-    }
-    if (
-      selectedCardKey == null &&
-      prevSelectedCardKey !== null &&
-      updatedCard.text
-    ) {
+    if (selectedCardKey === null && prevSelectedCardKey !== null) {
       console.log("hi");
       updateCardText(prevSelectedCardKey);
     }
     prevSelectedCardKey = selectedCardKey;
   }
 
-  $: if (!lodash.isEqual(updatedCard.tags, updatedCard.prevTags)) {
-    updatedCard.prevTags = updatedCard.tags;
-    // TODO: update tags
+  $: if (selectedCardKey !== null) {
+    if (selectedCardKey < allCards.length) {
+      selectedCard = allCards[selectedCardKey];
+    } else {
+      selectedCard = newCard;
+    }
   }
+
+  // $: if (!lodash.isEqual(updatedCard.tags, updatedCard.prevTags)) {
+  //   updatedCard.prevTags = updatedCard.tags;
+  //   // TODO: update tags
+  // }
 
   getCards();
 </script>
@@ -116,8 +108,8 @@
   {#if selectedCardKey !== null}
     <Card
       key={null}
-      bind:text={updatedCard.text}
-      bind:tags={updatedCard.tags}
+      bind:text={selectedCard.text}
+      bind:tags={selectedCard.tags}
       expanded={true}
       {setSelected}
     />
