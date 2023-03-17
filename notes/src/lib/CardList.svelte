@@ -91,7 +91,7 @@
   $: {
     if (selectedCardKey < allCards.length) {
       selectedCard = allCards[selectedCardKey];
-    } else if (selectedCard === newCardKey) {
+    } else if (selectedCardKey === newCardKey) {
       selectedCard = newCard;
     } else {
       selectedCard = null;
