@@ -112,6 +112,9 @@
       key={null}
       bind:text={selectedCard.text}
       bind:tags={selectedCard.tags}
+      tagValues={selectedCard.expand.tags.map((t) => {
+        return { tag: t.tag, color: t.color };
+      })}
       expanded={true}
       {setSelected}
     />

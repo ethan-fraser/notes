@@ -1,8 +1,11 @@
 <script lang="ts">
+  import TagSelector from "./TagSelector.svelte";
+
   export let key: number;
   export let newCard: boolean = false;
   export let text: string = "";
-  export let tags: string[] = [];
+  export let tags: any[] = [];
+  export let tagValues: { tag: string; color: string }[] = [];
   export let expanded: boolean = false;
   export let setSelected: (key: number | null) => void;
 </script>
@@ -18,6 +21,9 @@
     >
       <i class="fa-solid fa-x" />
     </span>
+    <div class="tagSelector">
+      <TagSelector selectedTags={tagValues} />
+    </div>
     <textarea bind:value={text} />
   </div>
 {:else if newCard}
@@ -74,10 +80,13 @@
     margin-bottom: 0;
     background-color: #242424;
     cursor: text;
-    padding: 35px 20px 20px 20px !important;
+    padding: 15px 20px 20px 20px !important;
   }
 
   @media (prefers-color-scheme: light) {
+    .card {
+      border: 1px solid black;
+    }
     .expanded {
       color: #213547;
       background-color: #ffffff;
@@ -92,11 +101,12 @@
   }
 
   textarea {
-    height: 100%;
+    height: 95%;
     width: 100%;
     outline: none;
     border: none;
     background-color: inherit;
     resize: none;
+    margin-top: 10px;
   }
 </style>
