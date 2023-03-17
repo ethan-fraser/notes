@@ -25,7 +25,9 @@
     <div class="tagSelector">
       <TagSelector selectedTags={tagValues} />
     </div>
-    <textarea bind:value={text} />
+    <div class="textAreaWrapper">
+      <textarea bind:value={text} />
+    </div>
   </div>
 {:else if newCard}
   <div
@@ -59,14 +61,8 @@
     text-align: left;
     padding: 10px;
     margin: 10px;
-    transition: width 0.5s, height 0.5s;
     cursor: pointer;
     flex-grow: 1;
-  }
-
-  .card:hover {
-    width: 205px;
-    height: 205px;
   }
 
   .newCard {
@@ -102,8 +98,13 @@
     cursor: pointer;
   }
 
-  textarea {
+  .textAreaWrapper {
     height: 95%;
+    display: flex;
+  }
+
+  textarea {
+    align-self: sretch;
     width: 100%;
     outline: none;
     border: none;
@@ -113,9 +114,15 @@
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
+    padding-bottom: 40px;
   }
 
   .cardText {
     margin-top: 5px;
+    width: 95%;
+    height: 95%;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
