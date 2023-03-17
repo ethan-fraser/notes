@@ -1,5 +1,6 @@
 <script lang="ts">
   import TagSelector from "./TagSelector.svelte";
+  import TagPreview from "./TagPreview.svelte";
 
   export let key: number;
   export let newCard: boolean = false;
@@ -44,7 +45,8 @@
     }}
     class="card"
   >
-    {text} ({tags})
+    <TagPreview tags={tagValues} />
+    <div class="cardText">{text}</div>
   </div>
 {/if}
 
@@ -108,5 +110,9 @@
     background-color: inherit;
     resize: none;
     margin-top: 10px;
+  }
+
+  .cardText {
+    margin-top: 5px;
   }
 </style>

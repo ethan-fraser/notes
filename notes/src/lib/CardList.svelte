@@ -124,6 +124,9 @@
         key={index}
         text={card.text}
         tags={card.expand.tags.map((t) => t.tag)}
+        tagValues={card.expand.tags.map((t) => {
+          return { tag: t.tag, color: t.color };
+        })}
         {setSelected}
       />
     {/each}

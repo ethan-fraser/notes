@@ -1,6 +1,5 @@
 <script lang="ts">
   export let selectedTags: { tag: string; color: string }[];
-  $: console.log(selectedTags);
 </script>
 
 <div class="tagSelector">
