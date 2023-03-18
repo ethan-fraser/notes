@@ -17,7 +17,6 @@
 
 <style>
   header {
-    width: 90vw;
     margin: 0 auto;
     display: flex;
     align-items: center;
