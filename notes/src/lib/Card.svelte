@@ -1,12 +1,11 @@
 <script lang="ts">
   import TagSelector from "./TagSelector.svelte";
   import TagPreview from "./TagPreview.svelte";
-  import type { Tag } from "./data-model";
+  import type { Item, Tag } from "./data-model";
 
   export let key: number;
+  export let card: Item;
   export let newCard: boolean = false;
-  export let text: string = "";
-  export let tags: Tag[] = [];
   export let expanded: boolean = false;
   export let setSelected: (key: number | null) => void;
 </script>
@@ -23,10 +22,10 @@
       <i class="fa-solid fa-x" />
     </span>
     <div class="tagSelector">
-      <TagSelector selectedTags={tags} />
+      <TagSelector selectedTags={card.tags} />
     </div>
     <div class="textAreaWrapper">
-      <textarea bind:value={text} />
+      <textarea bind:value={card.text} />
     </div>
   </div>
 {:else if newCard}
@@ -47,8 +46,8 @@
     }}
     class="card"
   >
-    <TagPreview {tags} />
-    <div class="cardText">{text}</div>
+    <TagPreview tags={card.tags} />
+    <div class="cardText">{card.text}</div>
   </div>
 {/if}
 

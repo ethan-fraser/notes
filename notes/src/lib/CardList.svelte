@@ -138,18 +138,17 @@
 
 <section class={selectedCardKey === null ? "cardSection" : "cardWrapper"}>
   {#if selectedCardKey !== null}
-    <Card
-      key={null}
-      bind:text={selectedCard.text}
-      bind:tags={selectedCard.tags}
-      expanded={true}
-      {setSelected}
-    />
+    <Card key={null} bind:card={selectedCard} expanded={true} {setSelected} />
   {:else}
     {#each allCards as card, index}
-      <Card key={index} text={card.text} tags={card.tags} {setSelected} />
+      <Card key={index} {card} {setSelected} />
     {/each}
-    <Card key={newCardKey} newCard={true} {setSelected} />
+    <Card
+      key={newCardKey}
+      card={{ id: null, text: "", tags: [newCardTag] }}
+      newCard={true}
+      {setSelected}
+    />
   {/if}
 </section>
 
