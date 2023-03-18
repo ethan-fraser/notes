@@ -33,27 +33,18 @@
         })
         .catch((err) => console.error(err));
     } else {
-      pb.collection("tags")
-        .getFirstListItem('tag="card"')
-        .then((newCardTag) => {
-          console.log(newCard.text);
-          pb.collection("items")
-            .create({
-              user: $currentUser.id,
-              text: newCard.text,
-              tags: newCardTag.id,
-            })
-            .then((record) => {
-              console.log("created card " + record.id);
-              allCards = [
-                ...allCards,
-                { ...record, expand: { tags: [newCardTag] } },
-              ];
-            })
-            .catch((err) => {
-              console.error(err);
-              return null;
-            });
+      pb.collection("items")
+        .create({
+          user: $currentUser.id,
+          text: newCard.text,
+          tags: newCardTag.id,
+        })
+        .then((record) => {
+          console.log("created card " + record.id);
+          allCards = [
+            ...allCards,
+            { ...record, expand: { tags: [newCardTag] } },
+          ];
         })
         .catch((err) => {
           console.error(err);
@@ -62,10 +53,35 @@
     }
   }
 
+  function createNewCard() {
+    pb.collection("tags")
+      .getFirstListItem('tag="card"')
+      .then((record) => {
+        newCardTag = record;
+        newCard = {
+          text: "",
+          tags: [],
+          expand: {
+            tags: [
+              {
+                tag: newCardTag?.tag ?? undefined,
+                color: newCardTag?.color ?? undefined,
+              },
+            ],
+          },
+        };
+      })
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
+  }
+
   function setSelected(key: number | null) {
     selectedCardKey = key;
   }
 
+  let newCardTag: any | null = null;
   let newCardKey: number = 0;
   let allCards: any[] = [];
   $: newCardKey = allCards.length;
@@ -75,10 +91,8 @@
   let newCard: {
     text: string;
     tags: string[];
-  } = {
-    text: "",
-    tags: [],
-  };
+    expand: { tags: { tag: string; color: string }[] };
+  } = null;
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
@@ -103,6 +117,7 @@
   //   // TODO: update tags
   // }
 
+  createNewCard();
   getCards();
 </script>
 
