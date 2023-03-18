@@ -5,7 +5,7 @@
 
   export let key: number;
   export let card: Item;
-  export let newCard: boolean = false;
+  export let isNewCard: boolean = false;
   export let expanded: boolean = false;
   export let setSelected: (key: number | null) => void;
 </script>
@@ -28,7 +28,7 @@
       <textarea bind:value={card.text} />
     </div>
   </div>
-{:else if newCard}
+{:else if isNewCard}
   <div
     on:click={() => setSelected(key)}
     on:keypress={(e) => {

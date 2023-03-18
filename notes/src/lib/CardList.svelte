@@ -135,7 +135,7 @@
     <Card
       key={newCardKey}
       card={{ id: null, text: "", tags: [newCardTag] }}
-      newCard={true}
+      isNewCard={true}
       {setSelected}
     />
   {/if}
