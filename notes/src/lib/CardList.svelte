@@ -96,7 +96,6 @@
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
-      console.log("hi");
       updateCardText(prevSelectedCardKey);
     }
     prevSelectedCardKey = selectedCardKey;
@@ -121,7 +120,7 @@
   getCards();
 </script>
 
-<section class="cardSection">
+<section class={selectedCardKey === null ? "cardSection" : "cardWrapper"}>
   {#if selectedCardKey !== null}
     <Card
       key={null}
@@ -155,5 +154,10 @@
     flex-wrap: wrap;
     width: 100%;
     margin-top: 10px;
+  }
+
+  .cardWrapper {
+    display: flex;
+    height: 80%;
   }
 </style>
