@@ -2,6 +2,7 @@
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import lodash from "lodash";
+  import type { Item } from "./data-model";
 
   async function getCards() {
     return await pb
@@ -15,7 +16,21 @@
           return record.expand.tags.filter((t) => t.tag === "card").length > 0;
         })
       )
-      .then((filtered) => (allCards = filtered))
+      .then(
+        (filtered) =>
+          (allCards = filtered.map((item) => {
+            return {
+              id: item.id,
+              text: item.text,
+              tags: item.expand.tags.map((t: { tag: any; color: any }) => {
+                return {
+                  tag: t.tag,
+                  color: t.color,
+                };
+              }),
+            };
+          }))
+      )
       .catch((err) => console.error(err));
   }
 
@@ -43,7 +58,7 @@
           console.log("created card " + record.id);
           allCards = [
             ...allCards,
-            { ...record, expand: { tags: [newCardTag] } },
+            { id: record.id, text: record.text, tags: [newCardTag] },
           ];
         })
         .catch((err) => {
@@ -83,7 +98,7 @@
 
   let newCardTag: any | null = null;
   let newCardKey: number = 0;
-  let allCards: any[] = [];
+  let allCards: Item[] = [];
   $: newCardKey = allCards.length;
   let selectedCard: any;
   let selectedCardKey: number | null = null;
@@ -127,23 +142,12 @@
       key={null}
       bind:text={selectedCard.text}
       bind:tags={selectedCard.tags}
-      tagValues={selectedCard.expand.tags.map((t) => {
-        return { tag: t.tag, color: t.color };
-      })}
       expanded={true}
       {setSelected}
     />
   {:else}
     {#each allCards as card, index}
-      <Card
-        key={index}
-        text={card.text}
-        tags={card.expand.tags.map((t) => t.tag)}
-        tagValues={card.expand.tags.map((t) => {
-          return { tag: t.tag, color: t.color };
-        })}
-        {setSelected}
-      />
+      <Card key={index} text={card.text} tags={card.tags} {setSelected} />
     {/each}
     <Card key={newCardKey} newCard={true} {setSelected} />
   {/if}
