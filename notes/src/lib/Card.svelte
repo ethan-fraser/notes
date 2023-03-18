@@ -74,7 +74,7 @@
   .expanded {
     position: relative;
     height: 100% !important;
-    width: 100% !important;
+    width: 90vw !important;
     margin-bottom: 0;
     background-color: #242424;
     cursor: text;
