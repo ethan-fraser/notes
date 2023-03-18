@@ -2,7 +2,7 @@
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import lodash from "lodash";
-  import type { Item } from "./data-model";
+  import type { Item, Tag } from "./data-model";
 
   async function getCards() {
     return await pb
@@ -72,18 +72,11 @@
     pb.collection("tags")
       .getFirstListItem('tag="card"')
       .then((record) => {
-        newCardTag = record;
+        newCardTag = { id: record.id, tag: record.tag, color: record.color };
         newCard = {
+          id: "",
           text: "",
-          tags: [],
-          expand: {
-            tags: [
-              {
-                tag: newCardTag?.tag ?? undefined,
-                color: newCardTag?.color ?? undefined,
-              },
-            ],
-          },
+          tags: [newCardTag],
         };
       })
       .catch((err) => {
@@ -96,18 +89,14 @@
     selectedCardKey = key;
   }
 
-  let newCardTag: any | null = null;
+  let newCardTag: Tag = null;
   let newCardKey: number = 0;
   let allCards: Item[] = [];
   $: newCardKey = allCards.length;
   let selectedCard: any;
-  let selectedCardKey: number | null = null;
-  let prevSelectedCardKey: number | null = null;
-  let newCard: {
-    text: string;
-    tags: string[];
-    expand: { tags: { tag: string; color: string }[] };
-  } = null;
+  let selectedCardKey: number = null;
+  let prevSelectedCardKey: number = null;
+  let newCard: Item = null;
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
