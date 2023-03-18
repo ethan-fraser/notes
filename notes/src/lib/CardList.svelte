@@ -96,7 +96,8 @@
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
-      updateCardText(prevSelectedCardKey);
+      if (!(prevSelectedCardKey === newCardKey && !newCard.text))
+        updateCardText(prevSelectedCardKey);
     }
     prevSelectedCardKey = selectedCardKey;
   }
