@@ -139,7 +139,6 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: 80%;
     margin-top: 10px;
   }
 </style>
