@@ -33,13 +33,7 @@
       <!-- {#if t.tag !== "card"}<i class="fa-solid fa-x removeTagButton" />{/if} -->
     </span>
   {/each}
-  <div
-    class="addTagButton"
-    on:click={() => (showTagCreator = true)}
-    on:keypress={(e) => {
-      if (e.code === "Space") showTagCreator = true;
-    }}
-  >
+  <div class="editTags">
     {#if showTagCreator}
       <TagSelector
         newTag={{ id: "", tag: "", color: "" }}
@@ -48,7 +42,13 @@
         hide={() => (showTagCreator = false)}
       />
     {:else}
-      <i class="fa-solid fa-plus" />
+      <i
+        class="fa-solid fa-plus"
+        on:click={() => (showTagCreator = true)}
+        on:keypress={(e) => {
+          if (e.code === "Space") showTagCreator = true;
+        }}
+      />
     {/if}
   </div>
 </div>
@@ -73,7 +73,11 @@
     padding-left: 8px;
   }
 
-  .addTagButton {
+  .editTags {
     position: relative;
+  }
+
+  .editTags i {
+    cursor: pointer;
   }
 </style>

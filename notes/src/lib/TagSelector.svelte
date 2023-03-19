@@ -7,8 +7,6 @@
   export let selectedTags: Tag[];
   export let hide: () => void;
 
-  console.log(selectedTags);
-
   let createNewTag = false;
 </script>
 
@@ -31,6 +29,10 @@
       </div>
     {/each}
   {/if}
+  <div class="buttonDiv">
+    <button class="cancelButton" on:click={hide}>Cancel</button>
+    <button class="saveButton">Save</button>
+  </div>
 </div>
 
 <style>
@@ -38,7 +40,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100px;
     padding: 0.5rem;
     border: 1px solid #fff;
     border-radius: 5px;
@@ -55,6 +56,22 @@
     margin-left: 0.5em;
     padding: 0.1em 0.3em;
     border-radius: 3px;
-    width: 50px;
+    width: 80px;
+  }
+
+  .buttonDiv {
+    display: flex;
+    margin-top: 1em;
+  }
+
+  .cancelButton {
+    background-color: #242424;
+    text-decoration: underline;
+    border: none !important;
+    outline: none;
+  }
+
+  .saveButton {
+    background-color: limegreen;
   }
 </style>
