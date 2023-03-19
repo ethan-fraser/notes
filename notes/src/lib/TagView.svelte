@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Tag } from "./data-model";
   import { pb } from "./pocketbase";
-  import TagCreator from "./TagCreator.svelte";
+  import TagSelector from "./TagSelector.svelte";
 
   export let selectedTags: Tag[];
 
@@ -41,7 +41,7 @@
     }}
   >
     {#if showTagCreator}
-      <TagCreator
+      <TagSelector
         newTag={{ id: "", tag: "", color: "" }}
         {allTags}
         {selectedTags}
