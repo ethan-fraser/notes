@@ -1,7 +1,6 @@
 <script lang="ts">
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
-  import lodash from "lodash";
   import type { Item, Tag } from "./data-model";
 
   async function getCards() {
