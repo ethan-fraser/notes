@@ -63,7 +63,7 @@
       <TagSelector
         {newTag}
         {allTags}
-        {selectedTags}
+        bind:selectedTags
         {requiredTag}
         {createTag}
         hide={() => (showTagCreator = false)}

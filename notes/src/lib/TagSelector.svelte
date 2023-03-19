@@ -11,6 +11,13 @@
 
   let createNewTag = false;
 
+  let checkedTags: { id: string; checked: boolean }[] = allTags.map((t) => {
+    return {
+      id: t.id,
+      checked: _.some(selectedTags, t),
+    };
+  });
+
   let colors = [
     "#FC4B4B",
     "#FFD23F",
@@ -49,18 +56,17 @@
       {/each}
     </div>
   {:else}
-    {#each allTags as t}
+    {#each allTags as t, index}
       <div class="tagCheckbox">
         <input
           type="checkbox"
           id={t.id}
           name={t.tag}
           value={t.tag}
-          checked={_.some(selectedTags, t)}
+          bind:checked={checkedTags[index].checked}
           disabled={t.tag === requiredTag}
         />
-        <label for={t.id} style="background-color: {t.color}">{t.tag}</label><br
-        />
+        <label for={t.id} style="background-color: {t.color}">{t.tag}</label>
       </div>
     {/each}
     <button class="newTagButton" on:click={() => (createNewTag = true)}
@@ -70,21 +76,35 @@
   <div class="buttonDiv">
     <button
       class="cancelButton"
-      on:click={createNewTag
-        ? () => {
-            createNewTag = false;
-            newTag = {
-              id: "",
-              tag: "",
-              color: "",
-            };
-          }
-        : hide}>Cancel</button
+      on:click={() => {
+        if (createNewTag) {
+          createNewTag = false;
+          newTag = {
+            id: "",
+            tag: "",
+            color: "",
+          };
+        } else {
+          hide();
+        }
+      }}>Cancel</button
     >
     <button
       class="saveButton"
       on:click={() => {
-        createTag().then(() => hide());
+        if (createNewTag) {
+          createTag().then(() => hide());
+        } else {
+          console.log(
+            checkedTags
+              .filter((tag) => tag.checked)
+              .map((tag) => allTags.find((t) => t.id === tag.id))
+          );
+          selectedTags = checkedTags
+            .filter((tag) => tag.checked)
+            .map((tag) => allTags.find((t) => t.id === tag.id));
+          hide();
+        }
       }}>{createNewTag ? "Create" : "Save"}</button
     >
   </div>
@@ -114,11 +134,13 @@
     margin-left: 0.5em;
     padding: 0.1em 0.3em;
     border-radius: 3px;
-    width: 80px;
+    width: 17ex;
+    white-space: nowrap;
+    color: #242424;
   }
 
   .newTagButton {
-    width: 80%;
+    width: 90%;
     background-color: #777777;
     margin: 0.8em auto 0 auto;
     padding: 0.3em;

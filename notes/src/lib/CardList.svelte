@@ -37,38 +37,38 @@
       .catch((err) => console.error(err));
   }
 
-  function updateCardText(cardKey: number | null) {
-    if (cardKey == null) return;
-    if (cardKey < allCards.length) {
-      console.log("updating card " + allCards[cardKey].id);
-      pb.collection("items")
-        .update(allCards[cardKey].id, {
-          text: allCards[cardKey].text,
-        })
-        .then((record) => {
-          console.log(record.text);
-          allCards[cardKey] = { ...allCards[cardKey], text: record.text };
-        })
-        .catch((err) => console.error(err));
-    } else {
-      pb.collection("items")
-        .create({
-          user: $currentUser.id,
-          text: newCard.text,
-          tags: newCardTag.id,
-        })
-        .then((record) => {
-          console.log("created card " + record.id);
-          allCards = [
-            ...allCards,
-            { id: record.id, text: record.text, tags: [newCardTag] },
-          ];
-        })
-        .catch((err) => {
-          console.error(err);
-          return null;
-        });
-    }
+  function createCardFromNewCard() {
+    pb.collection("items")
+      .create({
+        user: $currentUser.id,
+        text: newCard.text,
+        tags: newCardTag.id,
+      })
+      .then((record) => {
+        console.log("created card " + record.id);
+        allCards = [
+          ...allCards,
+          { id: record.id, text: record.text, tags: [newCardTag] },
+        ];
+      })
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
+  }
+
+  function updateCard(cardKey: number | null) {
+    console.log("updating card " + allCards[cardKey].id);
+    pb.collection("items")
+      .update(allCards[cardKey].id, {
+        text: allCards[cardKey].text,
+        tags: allCards[cardKey].tags.map((t) => t.id),
+      })
+      .then((record) => {
+        console.log(record.text);
+        console.log(record.tags);
+      })
+      .catch((err) => console.error(err));
   }
 
   function getCardTag() {
@@ -103,8 +103,11 @@
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
-      if (!(prevSelectedCardKey === newCardKey && !newCard.text))
-        updateCardText(prevSelectedCardKey);
+      if (prevSelectedCardKey === newCardKey && newCard.text) {
+        createCardFromNewCard();
+      } else {
+        updateCard(prevSelectedCardKey);
+      }
     }
     prevSelectedCardKey = selectedCardKey;
   }
