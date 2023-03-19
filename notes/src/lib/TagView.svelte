@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Tag } from "./data-model";
-  import { pb } from "./pocketbase";
+  import { currentUser, pb } from "./pocketbase";
   import TagSelector from "./TagSelector.svelte";
 
   export let selectedTags: Tag[];
@@ -17,6 +17,26 @@
             color: t.color,
           };
         });
+      })
+      .catch((err) => console.error(err));
+  }
+
+  async function createTag() {
+    await pb
+      .collection("tags")
+      .create({
+        user: $currentUser,
+        tag: newTag.tag,
+        color: newTag.color,
+      })
+      .then((t) => {
+        const tag: Tag = {
+          id: t.id,
+          tag: t.tag,
+          color: t.color,
+        };
+        selectedTags = [...selectedTags, tag];
+        allTags = [...allTags, tag];
       })
       .catch((err) => console.error(err));
   }
@@ -45,6 +65,7 @@
         {allTags}
         {selectedTags}
         {requiredTag}
+        {createTag}
         hide={() => (showTagCreator = false)}
       />
     {:else}

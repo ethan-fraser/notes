@@ -7,6 +7,7 @@
   export let selectedTags: Tag[];
   export let requiredTag: string;
   export let hide: () => void;
+  export let createTag: () => Promise<void>;
 
   let createNewTag = false;
 
@@ -80,7 +81,12 @@
           }
         : hide}>Cancel</button
     >
-    <button class="saveButton">{createNewTag ? "Create" : "Save"}</button>
+    <button
+      class="saveButton"
+      on:click={() => {
+        createTag().then(() => hide());
+      }}>{createNewTag ? "Create" : "Save"}</button
+    >
   </div>
 </div>
 
