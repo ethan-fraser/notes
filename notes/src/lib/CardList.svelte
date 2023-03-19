@@ -1,4 +1,5 @@
 <script lang="ts">
+  import _ from "lodash";
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import type { Item, Tag } from "./data-model";
@@ -104,6 +105,14 @@
     expandedCardKey = key;
   }
 
+  function selectCard(card: Item) {
+    if (_.includes(selectedCards, card)) {
+      selectedCards = selectedCards.filter((c) => c.id != card.id);
+    } else {
+      selectedCards = [...selectedCards, card];
+    }
+  }
+
   let newCardTag: Tag = null;
   let newCardKey: number = 0;
   let allCards: Item[] = [];
@@ -116,6 +125,7 @@
     text: "",
     tags: [newCardTag],
   };
+  let selectedCards: Item[] = [];
 
   $: if (expandedCardKey !== prevExpandedCardKey) {
     if (expandedCardKey === null && prevExpandedCardKey !== null) {
@@ -149,12 +159,25 @@
   getCards();
 </script>
 
-<section class={expandedCardKey === null ? "cardSection" : "cardWrapper"}>
+<section
+  class={expandedCardKey === null ? "cardSection" : "expandedCardWrapper"}
+>
   {#if expandedCardKey !== null}
     <Card key={null} bind:card={expandedCard} expanded={true} {expand} />
   {:else}
     {#each allCards as card, index}
-      <Card key={index} {card} {expand} />
+      <div class="cardWrapper">
+        <Card key={index} {card} {expand} />
+        <div
+          class={_.includes(selectedCards, card)
+            ? "selectedIcon"
+            : "selectIcon"}
+          on:click={() => selectCard(card)}
+          on:keydown={() => selectCard(card)}
+        >
+          <i class="fa-solid fa-check" />
+        </div>
+      </div>
     {/each}
     <Card key={newCardKey} card={newCard} isNewCard={true} {expand} />
   {/if}
@@ -168,8 +191,49 @@
     margin-top: 1rem;
   }
 
-  .cardWrapper {
+  .expandedCardWrapper {
     display: flex;
     height: 80%;
+  }
+
+  .cardWrapper {
+    position: relative;
+  }
+
+  .selectIcon,
+  .selectedIcon {
+    position: absolute;
+    top: 1.2em;
+    right: 1.2em;
+    font-size: 14px;
+    height: 17px;
+    width: 17px;
+    display: none;
+    place-items: center;
+    border: 1px solid white;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+
+  .selectedIcon {
+    color: #242424;
+    background-color: #fff;
+  }
+
+  .cardWrapper:hover .selectIcon,
+  .selectedIcon {
+    display: grid;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .selectIcon,
+    .selectedIcon {
+      border: 1px solid black;
+    }
+
+    .selectedIcon {
+      color: #fff;
+      background-color: #242424;
+    }
   }
 </style>
