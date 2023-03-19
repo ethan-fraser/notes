@@ -44,10 +44,8 @@
     <div class="colorSelector">
       {#each colors as color}
         <div
-          class="color"
-          style="background-color: {color}; border: {newTag.color === color
-            ? '3px solid white'
-            : 'none'}"
+          class={`color ${newTag.color === color ? "selectedColor" : ""}`}
+          style="background-color: {color};"
           on:click={() => (newTag.color = color)}
           on:keydown={() => (newTag.color = color)}
         />
@@ -193,9 +191,32 @@
     box-sizing: border-box;
   }
 
+  .selectedColor {
+    border: 3px solid #fff;
+  }
+
   .createTagError {
     margin-top: 0.8em;
     text-align: center;
     color: red;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .tagSelector {
+      background-color: #fff;
+      border: 1px solid black;
+    }
+
+    .newTagButton {
+      background-color: #777777;
+    }
+
+    .cancelButton {
+      background-color: #fff;
+    }
+
+    .selectedColor {
+      border: 3px solid #242424;
+    }
   }
 </style>
