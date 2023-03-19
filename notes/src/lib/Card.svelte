@@ -1,5 +1,5 @@
 <script lang="ts">
-  import TagSelector from "./TagSelector.svelte";
+  import TagView from "./TagView.svelte";
   import TagPreview from "./TagPreview.svelte";
   import type { Item, Tag } from "./data-model";
 
@@ -22,7 +22,7 @@
       <i class="fa-solid fa-x" />
     </span>
     <div class="tagSelector">
-      <TagSelector selectedTags={card.tags} />
+      <TagView selectedTags={card.tags} />
     </div>
     <div class="textAreaWrapper">
       <textarea bind:value={card.text} />
