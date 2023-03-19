@@ -31,7 +31,6 @@
   {#each selectedTags as t}
     <span class="selectedTag" style="background-color: {t.color}">
       {t.tag}
-      <!-- {#if t.tag !== "card"}<i class="fa-solid fa-x removeTagButton" />{/if} -->
     </span>
   {/each}
   <div class="editTags">
@@ -68,11 +67,6 @@
     border-radius: 8px;
     padding: 0 10px;
     margin-right: 10px;
-  }
-
-  .removeTagButton {
-    font-size: 11px;
-    padding-left: 8px;
   }
 
   .editTags {
