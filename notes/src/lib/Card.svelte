@@ -43,6 +43,7 @@
 {:else}
   <div on:click={() => expand(key)} on:keydown={() => expand(key)} class="card">
     <TagPreview tags={card.tags} />
+    <div class="cardTitle">{card.title}</div>
     <div class="cardText">{card.text}</div>
   </div>
 {/if}
@@ -123,10 +124,15 @@
     padding-bottom: 3rem;
   }
 
-  .cardText {
+  .cardTitle {
     margin-top: 0.5em;
+    font-weight: 700;
+    font-size: 1.1em;
+  }
+
+  .cardText {
     width: 95%;
-    height: 95%;
+    height: 85%;
     white-space: pre-wrap;
     overflow: hidden;
     text-overflow: ellipsis;
