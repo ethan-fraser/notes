@@ -67,7 +67,7 @@
   .newCard {
     display: grid;
     place-items: center;
-    font-size: 32px;
+    font-size: 2em;
   }
 
   .expanded {
@@ -77,7 +77,7 @@
     margin-bottom: 0;
     background-color: #242424;
     cursor: text;
-    padding: 15px 20px 20px 20px !important;
+    padding: 1rem !important;
   }
 
   @media (prefers-color-scheme: light) {
@@ -92,8 +92,8 @@
 
   .closeButton {
     position: absolute;
-    top: 15px;
-    right: 20px;
+    top: 1rem;
+    right: 1rem;
     cursor: pointer;
   }
 
@@ -109,15 +109,15 @@
     border: none;
     background-color: inherit;
     resize: none;
-    margin-top: 10px;
+    margin-top: 1rem;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 1em;
     line-height: 1.5;
-    padding-bottom: 40px;
+    padding-bottom: 3rem;
   }
 
   .cardText {
-    margin-top: 5px;
+    margin-top: 0.5em;
     width: 95%;
     height: 95%;
     white-space: pre-wrap;
