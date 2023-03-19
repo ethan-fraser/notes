@@ -23,6 +23,11 @@
 
   let showTagCreator = false;
   let allTags: Tag[] = [];
+  let newTag: Tag = {
+    id: "",
+    tag: "",
+    color: "",
+  };
 
   getAllTags();
 </script>
@@ -36,7 +41,7 @@
   <div class="editTags">
     {#if showTagCreator}
       <TagSelector
-        newTag={{ id: "", tag: "", color: "" }}
+        {newTag}
         {allTags}
         {selectedTags}
         {requiredTag}

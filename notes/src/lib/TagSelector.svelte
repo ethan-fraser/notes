@@ -1,5 +1,5 @@
 <script lang="ts">
-  import _ from "lodash";
+  import _, { create } from "lodash";
   import type { Tag } from "./data-model";
 
   export let newTag: Tag;
@@ -29,9 +29,19 @@
         />
       </div>
     {/each}
+    <button class="newTagButton" on:click={() => (createNewTag = true)}
+      ><i class="fa-solid fa-plus" /> New tag</button
+    >
   {/if}
   <div class="buttonDiv">
-    <button class="cancelButton" on:click={hide}>Cancel</button>
+    <button
+      class="cancelButton"
+      on:click={createNewTag
+        ? () => {
+            createNewTag = false;
+          }
+        : hide}>Cancel</button
+    >
     <button class="saveButton">Save</button>
   </div>
 </div>
@@ -41,6 +51,8 @@
     position: absolute;
     top: 0;
     left: 0;
+    display: flex;
+    flex-direction: column;
     padding: 0.5rem;
     border: 1px solid #fff;
     border-radius: 5px;
@@ -60,9 +72,16 @@
     width: 80px;
   }
 
+  .newTagButton {
+    width: 80%;
+    background-color: #777777;
+    margin: 0.8em auto 0 auto;
+    padding: 0.3em;
+  }
+
   .buttonDiv {
     display: flex;
-    margin-top: 1em;
+    margin-top: 0.8em;
   }
 
   .cancelButton {
