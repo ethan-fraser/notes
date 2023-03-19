@@ -17,7 +17,6 @@
       checked: _.some(selectedTags, t),
     };
   });
-
   let colors = [
     "#FC4B4B",
     "#FFD23F",
@@ -36,6 +35,7 @@
     "#00CCCC",
     "#FA8072",
   ];
+  let createTagError: string;
 </script>
 
 <div class="tagSelector">
@@ -55,6 +55,9 @@
         />
       {/each}
     </div>
+    {#if createTagError}
+      <span class="createTagError">{createTagError}</span>
+    {/if}
   {:else}
     {#each allTags as t, index}
       <div class="tagCheckbox">
@@ -78,6 +81,7 @@
       class="cancelButton"
       on:click={() => {
         if (createNewTag) {
+          createTagError = "";
           createNewTag = false;
           newTag = {
             id: "",
@@ -93,7 +97,22 @@
       class="saveButton"
       on:click={() => {
         if (createNewTag) {
-          createTag().then(() => hide());
+          createTagError = "";
+          if (!newTag.color) {
+            createTagError = "Select a color.";
+            return;
+          } else if (!newTag.tag.length || newTag.tag.length > 16) {
+            createTagError = "Tag name must be 1-16 chars.";
+            return;
+          }
+          createTag().then(() => {
+            newTag = {
+              id: "",
+              tag: "",
+              color: "",
+            };
+            hide();
+          });
         } else {
           console.log(
             checkedTags
@@ -175,5 +194,11 @@
     border-radius: 4px;
     cursor: pointer;
     box-sizing: border-box;
+  }
+
+  .createTagError {
+    margin-top: 0.8em;
+    text-align: center;
+    color: red;
   }
 </style>

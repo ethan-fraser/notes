@@ -61,7 +61,7 @@
   <div class="editTags">
     {#if showTagCreator}
       <TagSelector
-        {newTag}
+        bind:newTag
         {allTags}
         bind:selectedTags
         {requiredTag}
