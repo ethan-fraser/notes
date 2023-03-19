@@ -1,5 +1,5 @@
 <script lang="ts">
-  import _, { create } from "lodash";
+  import _ from "lodash";
   import type { Tag } from "./data-model";
 
   export let newTag: Tag;
@@ -8,7 +8,7 @@
   export let requiredTag: string;
   export let hide: () => void;
   export let createTag: () => Promise<void>;
-  export let deleteTag: (tag: Tag) => Promise<void>;
+  export let deleteConfirm: (tag: Tag) => void;
 
   let systemTags = ["card", "kanban"];
   let createNewTag = false;
@@ -38,6 +38,10 @@
     "#FA8072",
   ];
   let createTagError: string;
+
+  $: checkedTags = checkedTags.filter((t) =>
+    allTags.some((a) => a.id === t.id)
+  );
 </script>
 
 <div class="tagSelector">
@@ -71,16 +75,9 @@
         {#if !systemTags.includes(t.tag)}
           <span
             class="deleteTagIcon"
-            on:click={() => {
-              deleteTag(t).then(
-                () => (checkedTags = checkedTags.filter((c) => c.id !== t.id))
-              );
-            }}
-            on:keydown={() => {
-              deleteTag(t).then(
-                () => (checkedTags = checkedTags.filter((c) => c.id !== t.id))
-              );
-            }}><i class="fa-solid fa-trash" /></span
+            on:click={() => deleteConfirm(t)}
+            on:keydown={() => deleteConfirm(t)}
+            ><i class="fa-solid fa-trash" /></span
           >
         {/if}
       </div>

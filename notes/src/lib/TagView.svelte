@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { noop } from "lodash";
   import type { Tag } from "./data-model";
   import { currentUser, pb } from "./pocketbase";
   import TagSelector from "./TagSelector.svelte";
@@ -41,6 +42,11 @@
       .catch((err) => console.error(err));
   }
 
+  function deleteConfirm(tag: Tag) {
+    showDeleteConfirm = true;
+    tagToDelete = tag;
+  }
+
   async function deleteTag(tag: Tag) {
     await pb
       .collection("tags")
@@ -54,6 +60,8 @@
   }
 
   let showTagCreator = false;
+  let showDeleteConfirm = false;
+  let tagToDelete: Tag;
   let allTags: Tag[] = [];
   let newTag: Tag = {
     id: "",
@@ -78,7 +86,7 @@
         bind:selectedTags
         {requiredTag}
         {createTag}
-        {deleteTag}
+        {deleteConfirm}
         hide={() => (showTagCreator = false)}
       />
     {:else}
@@ -90,6 +98,28 @@
     {/if}
   </div>
 </div>
+{#if showDeleteConfirm}
+  <div class="deleteConfirmModal">
+    <span style="font-weight: 700;">Are you sure?</span>
+    <span
+      >Deleting this tag will mean all other cards with this tag assigned lose
+      it as well.</span
+    >
+    <div class="deleteConfirmButtonDiv">
+      <button
+        class="deleteCancelButton"
+        on:click={() => (showDeleteConfirm = false)}>Cancel</button
+      >
+      <button
+        class="deleteConfirmButton"
+        on:click={() => {
+          deleteTag(tagToDelete);
+          showDeleteConfirm = false;
+        }}>Delete</button
+      >
+    </div>
+  </div>
+{/if}
 
 <style>
   .tagSelector {
@@ -112,5 +142,40 @@
 
   .editTags i {
     cursor: pointer;
+  }
+
+  .deleteConfirmModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 400px;
+    background-color: #242424;
+    border: 1px solid white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+  }
+
+  .deleteConfirmModal span {
+    text-align: center;
+  }
+
+  .deleteConfirmButtonDiv {
+    margin-top: 1em;
+  }
+
+  .deleteCancelButton {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    text-decoration: underline;
+  }
+
+  .deleteConfirmButton {
+    background-color: red;
   }
 </style>
