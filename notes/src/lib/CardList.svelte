@@ -202,7 +202,7 @@
       on:click={() => (selectedCards = [])}
       on:keydown={() => (selectedCards = [])}><i class="fa-solid fa-x" /></span
     >
-    <span>Delete selected cards?</span>
+    <span>Delete selected?</span>
     <button on:click={deleteSelected} class="deleteButton">Confirm</button>
   </div>
 {/if}
