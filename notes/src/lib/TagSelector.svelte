@@ -8,7 +8,8 @@
   export let requiredTag: string;
   export let hide: () => void;
   export let createTag: () => Promise<void>;
-  export let deleteConfirm: (tag: Tag) => void;
+  export let confirmDelete: (tag: Tag) => void;
+  export let cancelDelete: () => void;
 
   let systemTags = ["card", "kanban"];
   let createNewTag = false;
@@ -75,8 +76,8 @@
         {#if !systemTags.includes(t.tag)}
           <span
             class="deleteTagIcon"
-            on:click={() => deleteConfirm(t)}
-            on:keydown={() => deleteConfirm(t)}
+            on:click={() => confirmDelete(t)}
+            on:keydown={() => confirmDelete(t)}
             ><i class="fa-solid fa-trash" /></span
           >
         {/if}
@@ -90,6 +91,7 @@
     <button
       class="cancelButton"
       on:click={() => {
+        cancelDelete();
         if (createNewTag) {
           createTagError = "";
           createNewTag = false;
@@ -106,6 +108,7 @@
     <button
       class="saveButton"
       on:click={() => {
+        cancelDelete();
         if (createNewTag) {
           createTagError = "";
           if (!newTag.color) {

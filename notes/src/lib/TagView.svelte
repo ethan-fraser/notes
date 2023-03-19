@@ -42,9 +42,13 @@
       .catch((err) => console.error(err));
   }
 
-  function deleteConfirm(tag: Tag) {
+  function confirmDelete(tag: Tag) {
     showDeleteConfirm = true;
     tagToDelete = tag;
+  }
+
+  function cancelDelete() {
+    showDeleteConfirm = false;
   }
 
   async function deleteTag(tag: Tag) {
@@ -86,7 +90,8 @@
         bind:selectedTags
         {requiredTag}
         {createTag}
-        {deleteConfirm}
+        {confirmDelete}
+        {cancelDelete}
         hide={() => (showTagCreator = false)}
       />
     {:else}
