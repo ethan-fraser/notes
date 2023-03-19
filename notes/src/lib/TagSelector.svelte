@@ -12,7 +12,7 @@
   let createNewTag = false;
 </script>
 
-<div class="tagCreator">
+<div class="tagSelector">
   {#if createNewTag}
     <input type="text" placeholder="New tag name" bind:value={newTag.tag} />
   {:else}
@@ -34,7 +34,7 @@
 </div>
 
 <style>
-  .tagCreator {
+  .tagSelector {
     position: absolute;
     top: 0;
     left: 0;
