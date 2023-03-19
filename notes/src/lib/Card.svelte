@@ -7,15 +7,15 @@
   export let card: Item;
   export let isNewCard: boolean = false;
   export let expanded: boolean = false;
-  export let setSelected: (key: number | null) => void;
+  export let expand: (key: number | null) => void;
 </script>
 
 {#if expanded}
   <div class="card expanded">
     <span
-      on:click={() => setSelected(key)}
+      on:click={() => expand(key)}
       on:keypress={(e) => {
-        if (e.code === "Space") setSelected(key);
+        if (e.code === "Space") expand(key);
       }}
       class="closeButton"
     >
@@ -30,9 +30,9 @@
   </div>
 {:else if isNewCard}
   <div
-    on:click={() => setSelected(key)}
+    on:click={() => expand(key)}
     on:keypress={(e) => {
-      if (e.code === "Space") setSelected(key);
+      if (e.code === "Space") expand(key);
     }}
     class="card newCard"
   >
@@ -40,9 +40,9 @@
   </div>
 {:else}
   <div
-    on:click={() => setSelected(key)}
+    on:click={() => expand(key)}
     on:keypress={(e) => {
-      if (e.code === "Space") setSelected(key);
+      if (e.code === "Space") expand(key);
     }}
     class="card"
   >

@@ -101,7 +101,7 @@
       });
   }
 
-  function setSelected(key: number | null) {
+  function expand(key: number | null) {
     selectedCardKey = key;
   }
 
@@ -152,12 +152,12 @@
 
 <section class={selectedCardKey === null ? "cardSection" : "cardWrapper"}>
   {#if selectedCardKey !== null}
-    <Card key={null} bind:card={selectedCard} expanded={true} {setSelected} />
+    <Card key={null} bind:card={selectedCard} expanded={true} {expand} />
   {:else}
     {#each allCards as card, index}
-      <Card key={index} {card} {setSelected} />
+      <Card key={index} {card} {expand} />
     {/each}
-    <Card key={newCardKey} card={newCard} isNewCard={true} {setSelected} />
+    <Card key={newCardKey} card={newCard} isNewCard={true} {expand} />
   {/if}
 </section>
 
