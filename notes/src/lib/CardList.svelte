@@ -101,47 +101,47 @@
   }
 
   function expand(key: number | null) {
-    selectedCardKey = key;
+    expandedCardKey = key;
   }
 
   let newCardTag: Tag = null;
   let newCardKey: number = 0;
   let allCards: Item[] = [];
   $: newCardKey = allCards.length;
-  let selectedCard: any;
-  let selectedCardKey: number = null;
-  let prevSelectedCardKey: number = null;
+  let expandedCard: any;
+  let expandedCardKey: number = null;
+  let prevExpandedCardKey: number = null;
   let newCard: Item = {
     id: "",
     text: "",
     tags: [newCardTag],
   };
 
-  $: if (selectedCardKey !== prevSelectedCardKey) {
-    if (selectedCardKey === null && prevSelectedCardKey !== null) {
-      if (prevSelectedCardKey === newCardKey && newCard.text) {
+  $: if (expandedCardKey !== prevExpandedCardKey) {
+    if (expandedCardKey === null && prevExpandedCardKey !== null) {
+      if (prevExpandedCardKey === newCardKey && newCard.text) {
         createCardFromNewCard();
         newCard = {
           id: "",
           text: "",
           tags: [newCardTag],
         };
-      } else if (prevSelectedCardKey === newCardKey) {
+      } else if (prevExpandedCardKey === newCardKey) {
         newCard = { id: "", text: "", tags: [newCardTag] };
-      } else if (prevSelectedCardKey < allCards.length) {
-        updateCard(prevSelectedCardKey);
+      } else if (prevExpandedCardKey < allCards.length) {
+        updateCard(prevExpandedCardKey);
       }
     }
-    prevSelectedCardKey = selectedCardKey;
+    prevExpandedCardKey = expandedCardKey;
   }
 
   $: {
-    if (selectedCardKey < allCards.length) {
-      selectedCard = allCards[selectedCardKey];
-    } else if (selectedCardKey === newCardKey) {
-      selectedCard = newCard;
+    if (expandedCardKey < allCards.length) {
+      expandedCard = allCards[expandedCardKey];
+    } else if (expandedCardKey === newCardKey) {
+      expandedCard = newCard;
     } else {
-      selectedCard = null;
+      expandedCard = null;
     }
   }
 
@@ -149,9 +149,9 @@
   getCards();
 </script>
 
-<section class={selectedCardKey === null ? "cardSection" : "cardWrapper"}>
-  {#if selectedCardKey !== null}
-    <Card key={null} bind:card={selectedCard} expanded={true} {expand} />
+<section class={expandedCardKey === null ? "cardSection" : "cardWrapper"}>
+  {#if expandedCardKey !== null}
+    <Card key={null} bind:card={expandedCard} expanded={true} {expand} />
   {:else}
     {#each allCards as card, index}
       <Card key={index} {card} {expand} />
