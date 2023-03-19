@@ -3,6 +3,7 @@
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import type { Item, Tag } from "./data-model";
+  import { select_multiple_value } from "svelte/internal";
 
   async function getCards() {
     return await pb
@@ -101,6 +102,18 @@
       });
   }
 
+  function deleteSelected() {
+    selectedCards.forEach((card) => {
+      pb.collection("items")
+        .delete(card.id)
+        .then(() => {
+          selectedCards = selectedCards.filter((c) => c.id != card.id);
+          allCards = allCards.filter((c) => c.id != card.id);
+        })
+        .catch((err) => console.error(err));
+    });
+  }
+
   function expand(key: number | null) {
     expandedCardKey = key;
   }
@@ -182,6 +195,17 @@
     <Card key={newCardKey} card={newCard} isNewCard={true} {expand} />
   {/if}
 </section>
+{#if selectedCards.length}
+  <div class="deleteBanner">
+    <span
+      class="cancelDelete"
+      on:click={() => (selectedCards = [])}
+      on:keydown={() => (selectedCards = [])}><i class="fa-solid fa-x" /></span
+    >
+    <span>Delete selected cards?</span>
+    <button on:click={deleteSelected} class="deleteButton">Confirm</button>
+  </div>
+{/if}
 
 <style>
   .cardSection {
@@ -225,6 +249,38 @@
     display: grid;
   }
 
+  .deleteBanner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 3rem;
+    border: 1px solid #fff;
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .deleteButton {
+    color: red;
+    background-color: #00000000;
+    border: none;
+    outline: none;
+  }
+
+  .deleteButton:hover {
+    text-decoration: underline;
+  }
+
+  .cancelDelete {
+    cursor: pointer;
+  }
+
   @media (prefers-color-scheme: light) {
     .selectIcon,
     .selectedIcon {
@@ -234,6 +290,11 @@
     .selectedIcon {
       color: #fff;
       background-color: #242424;
+    }
+
+    .deleteBanner {
+      background-color: #ddd;
+      border: 1px solid #242424;
     }
   }
 </style>
