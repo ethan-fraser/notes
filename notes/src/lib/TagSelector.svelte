@@ -1,5 +1,9 @@
 <script lang="ts">
+  import TagCreator from "./TagCreator.svelte";
+
   export let selectedTags: { tag: string; color: string }[];
+
+  let showTagCreator = false;
 </script>
 
 <div class="tagSelector">
@@ -9,7 +13,22 @@
       {#if t.tag !== "card"}<i class="fa-solid fa-x removeTagButton" />{/if}
     </span>
   {/each}
-  <span class="addTagButton"><i class="fa-solid fa-plus" /></span>
+  <div
+    class="addTagButton"
+    on:click={() => (showTagCreator = true)}
+    on:keypress={(e) => {
+      if (e.code === "Space") showTagCreator = true;
+    }}
+  >
+    {#if showTagCreator}
+      <TagCreator
+        newTag={{ id: "", tag: "", color: "" }}
+        hide={() => (showTagCreator = false)}
+      />
+    {:else}
+      <i class="fa-solid fa-plus" />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -30,5 +49,9 @@
   .removeTagButton {
     font-size: 11px;
     padding-left: 8px;
+  }
+
+  .addTagButton {
+    position: relative;
   }
 </style>
