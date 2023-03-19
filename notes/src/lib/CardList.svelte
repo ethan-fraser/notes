@@ -127,6 +127,8 @@
           text: "",
           tags: [newCardTag],
         };
+      } else if (prevSelectedCardKey === newCardKey) {
+        newCard = { id: "", text: "", tags: [newCardTag] };
       } else if (prevSelectedCardKey < allCards.length) {
         updateCard(prevSelectedCardKey);
       }

@@ -35,7 +35,6 @@
           tag: t.tag,
           color: t.color,
         };
-        selectedTags = [...selectedTags, tag];
         allTags = [...allTags, tag];
       })
       .catch((err) => console.error(err));

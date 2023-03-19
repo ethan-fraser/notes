@@ -111,7 +111,11 @@
               tag: "",
               color: "",
             };
-            hide();
+            checkedTags = [
+              ...checkedTags,
+              { id: allTags[allTags.length - 1].id, checked: true },
+            ];
+            createNewTag = false;
           });
         } else {
           selectedTags = checkedTags
