@@ -71,7 +71,7 @@
     }
   }
 
-  function createNewCard() {
+  function getCardTag() {
     pb.collection("tags")
       .getFirstListItem('tag="card"')
       .then((record) => {
@@ -119,12 +119,7 @@
     }
   }
 
-  // $: if (!lodash.isEqual(updatedCard.tags, updatedCard.prevTags)) {
-  //   updatedCard.prevTags = updatedCard.tags;
-  //   // TODO: update tags
-  // }
-
-  createNewCard();
+  getCardTag();
   getCards();
 </script>
 
