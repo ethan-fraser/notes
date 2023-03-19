@@ -5,6 +5,7 @@
   export let newTag: Tag;
   export let allTags: Tag[];
   export let selectedTags: Tag[];
+  export let requiredTag: string;
   export let hide: () => void;
 
   let createNewTag = false;
@@ -14,7 +15,6 @@
   {#if createNewTag}
     <input type="text" placeholder="New tag name" bind:value={newTag.tag} />
   {:else}
-    <span>Select tags:</span>
     {#each allTags as t}
       <div class="tagCheckbox">
         <input
@@ -23,6 +23,7 @@
           name={t.tag}
           value={t.tag}
           checked={_.some(selectedTags, t)}
+          disabled={t.tag === requiredTag}
         />
         <label for={t.id} style="background-color: {t.color}">{t.tag}</label><br
         />

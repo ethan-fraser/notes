@@ -4,6 +4,7 @@
   import TagSelector from "./TagSelector.svelte";
 
   export let selectedTags: Tag[];
+  export let requiredTag: string;
 
   function getAllTags() {
     pb.collection("tags")
@@ -39,6 +40,7 @@
         newTag={{ id: "", tag: "", color: "" }}
         {allTags}
         {selectedTags}
+        {requiredTag}
         hide={() => (showTagCreator = false)}
       />
     {:else}

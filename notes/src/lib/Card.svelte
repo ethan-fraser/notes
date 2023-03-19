@@ -22,7 +22,7 @@
       <i class="fa-solid fa-x" />
     </span>
     <div class="tagSelector">
-      <TagView selectedTags={card.tags} />
+      <TagView selectedTags={card.tags} requiredTag="card" />
     </div>
     <div class="textAreaWrapper">
       <textarea bind:value={card.text} />
