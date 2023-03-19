@@ -160,6 +160,14 @@
     padding: 1em;
   }
 
+  @media (prefers-color-scheme: light) {
+    .deleteConfirmModal {
+      background-color: #fff;
+      color: #242424;
+      border: 1px solid #242424;
+    }
+  }
+
   .deleteConfirmModal span {
     text-align: center;
   }
