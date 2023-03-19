@@ -9,11 +9,44 @@
   export let hide: () => void;
 
   let createNewTag = false;
+
+  let colors = [
+    "#FC4B4B",
+    "#FFD23F",
+    "#00BFFF",
+    "#FF7A33",
+    "#32CD32",
+    "#8B00FF",
+    "#4BFCC4",
+    "#CD32A5",
+    "#CCFF33",
+    "#00FF7F",
+    "#FF33F2",
+    "#BFFF00",
+    "#FFCC00",
+    "#7F00FF",
+    "#00CCCC",
+    "#FA8072",
+  ];
 </script>
 
 <div class="tagSelector">
   {#if createNewTag}
     <input type="text" placeholder="New tag name" bind:value={newTag.tag} />
+    <div class="colorSelector">
+      {#each colors as color}
+        <div
+          class="color"
+          style="background-color: {color}; border: {newTag.color === color
+            ? '3px solid white'
+            : 'none'}"
+          on:click={() => (newTag.color = color)}
+          on:keypress={(e) => {
+            if (e.code === "Space") newTag.color = color;
+          }}
+        />
+      {/each}
+    </div>
   {:else}
     {#each allTags as t}
       <div class="tagCheckbox">
@@ -39,10 +72,15 @@
       on:click={createNewTag
         ? () => {
             createNewTag = false;
+            newTag = {
+              id: "",
+              tag: "",
+              color: "",
+            };
           }
         : hide}>Cancel</button
     >
-    <button class="saveButton">Save</button>
+    <button class="saveButton">{createNewTag ? "Create" : "Save"}</button>
   </div>
 </div>
 
@@ -58,6 +96,7 @@
     border-radius: 5px;
     background-color: #242424;
     font-size: 0.8em;
+    cursor: default;
   }
 
   .tagCheckbox {
@@ -93,5 +132,20 @@
 
   .saveButton {
     background-color: limegreen;
+  }
+
+  .colorSelector {
+    display: grid;
+    grid-template-columns: 30px 30px 30px 30px;
+    gap: 5px;
+    margin: 1em auto 0 auto;
+  }
+
+  .color {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
   }
 </style>
