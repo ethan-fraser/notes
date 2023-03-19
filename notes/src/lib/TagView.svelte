@@ -5,6 +5,7 @@
 
   export let selectedTags: Tag[];
   export let requiredTag: string;
+  export let deleteTagFromAll: (tag: Tag) => void;
 
   function getAllTags() {
     pb.collection("tags")
@@ -40,6 +41,18 @@
       .catch((err) => console.error(err));
   }
 
+  async function deleteTag(tag: Tag) {
+    await pb
+      .collection("tags")
+      .delete(tag.id)
+      .then(() => {
+        allTags = allTags.filter((t) => t.id !== tag.id);
+        selectedTags = selectedTags.filter((t) => t.id !== tag.id);
+        deleteTagFromAll(tag);
+      })
+      .catch((err) => console.error(err));
+  }
+
   let showTagCreator = false;
   let allTags: Tag[] = [];
   let newTag: Tag = {
@@ -65,6 +78,7 @@
         bind:selectedTags
         {requiredTag}
         {createTag}
+        {deleteTag}
         hide={() => (showTagCreator = false)}
       />
     {:else}

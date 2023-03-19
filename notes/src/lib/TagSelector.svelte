@@ -8,7 +8,9 @@
   export let requiredTag: string;
   export let hide: () => void;
   export let createTag: () => Promise<void>;
+  export let deleteTag: (tag: Tag) => Promise<void>;
 
+  let systemTags = ["card", "kanban"];
   let createNewTag = false;
 
   let checkedTags: { id: string; checked: boolean }[] = allTags.map((t) => {
@@ -66,6 +68,21 @@
           disabled={t.tag === requiredTag}
         />
         <label for={t.id} style="background-color: {t.color}">{t.tag}</label>
+        {#if !systemTags.includes(t.tag)}
+          <span
+            class="deleteTagIcon"
+            on:click={() => {
+              deleteTag(t).then(
+                () => (checkedTags = checkedTags.filter((c) => c.id !== t.id))
+              );
+            }}
+            on:keydown={() => {
+              deleteTag(t).then(
+                () => (checkedTags = checkedTags.filter((c) => c.id !== t.id))
+              );
+            }}><i class="fa-solid fa-trash" /></span
+          >
+        {/if}
       </div>
     {/each}
     <button class="newTagButton" on:click={() => (createNewTag = true)}
@@ -151,6 +168,22 @@
     width: 17ex;
     white-space: nowrap;
     color: #242424;
+    margin-right: 1.5em;
+  }
+
+  .deleteTagIcon {
+    color: red;
+    margin-left: 0.5em;
+    cursor: pointer;
+    display: none;
+  }
+
+  .tagCheckbox:hover .deleteTagIcon {
+    display: initial;
+  }
+
+  .tagCheckbox:hover label {
+    margin-right: 0;
   }
 
   .newTagButton {

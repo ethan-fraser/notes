@@ -8,6 +8,7 @@
   export let isNewCard: boolean = false;
   export let expanded: boolean = false;
   export let expand: (key: number | null) => void;
+  export let deleteTagFromAll: (tag: Tag) => void = () => {};
 </script>
 
 {#if expanded}
@@ -20,7 +21,11 @@
       <i class="fa-solid fa-x" />
     </span>
     <div class="tagSelector">
-      <TagView bind:selectedTags={card.tags} requiredTag="card" />
+      <TagView
+        bind:selectedTags={card.tags}
+        requiredTag="card"
+        {deleteTagFromAll}
+      />
     </div>
     <input
       type="text"

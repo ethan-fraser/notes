@@ -103,6 +103,15 @@
       });
   }
 
+  function deleteTagFromAll(tag: Tag) {
+    allCards = allCards.map((card) => {
+      return {
+        ...card,
+        tags: card.tags.filter((t) => t.id !== tag.id),
+      };
+    });
+  }
+
   function deleteSelected() {
     selectedCards.forEach((card) => {
       pb.collection("items")
@@ -179,7 +188,13 @@
   class={expandedCardKey === null ? "cardSection" : "expandedCardWrapper"}
 >
   {#if expandedCardKey !== null}
-    <Card key={null} bind:card={expandedCard} expanded={true} {expand} />
+    <Card
+      key={null}
+      bind:card={expandedCard}
+      expanded={true}
+      {expand}
+      {deleteTagFromAll}
+    />
   {:else}
     {#each allCards as card, index}
       <div class="cardWrapper">
