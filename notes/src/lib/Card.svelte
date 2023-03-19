@@ -19,11 +19,12 @@
     >
       <i class="fa-solid fa-x" />
     </span>
+    <input type="text" placeholder="Title" class="titleInput" />
     <div class="tagSelector">
       <TagView bind:selectedTags={card.tags} requiredTag="card" />
     </div>
     <div class="textAreaWrapper">
-      <textarea bind:value={card.text} />
+      <textarea bind:value={card.text} placeholder="Take a note..." />
     </div>
   </div>
 {:else if isNewCard}
@@ -85,6 +86,17 @@
     top: 1rem;
     right: 1rem;
     cursor: pointer;
+  }
+
+  .titleInput {
+    font-size: 1.8em;
+    font-weight: 700;
+    width: 100%;
+    height: 1.5em;
+    margin-bottom: 0.2em;
+    outline: none;
+    border: none;
+    background-color: transparent;
   }
 
   .textAreaWrapper {
