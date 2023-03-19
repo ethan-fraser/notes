@@ -25,7 +25,7 @@
     await pb
       .collection("tags")
       .create({
-        user: $currentUser,
+        user: $currentUser.id,
         tag: newTag.tag,
         color: newTag.color,
       })
