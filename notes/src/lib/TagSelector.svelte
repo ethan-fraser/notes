@@ -83,8 +83,12 @@
         {/if}
       </div>
     {/each}
-    <button class="newTagButton" on:click={() => (createNewTag = true)}
-      ><i class="fa-solid fa-plus" /> New tag</button
+    <button
+      class="newTagButton"
+      on:click={() => {
+        cancelDelete();
+        createNewTag = true;
+      }}><i class="fa-solid fa-plus" /> New tag</button
     >
   {/if}
   <div class="buttonDiv">
@@ -241,7 +245,7 @@
     }
 
     .newTagButton {
-      background-color: #777777;
+      background-color: #bbb;
     }
 
     .cancelButton {
