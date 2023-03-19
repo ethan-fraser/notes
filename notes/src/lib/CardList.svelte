@@ -22,6 +22,7 @@
           (allCards = filtered.map((item) => {
             return {
               id: item.id,
+              title: item.title,
               text: item.text,
               tags: item.expand.tags.map(
                 (t: { id: string; tag: string; color: string }) => {
@@ -43,6 +44,7 @@
       .create(
         {
           user: $currentUser.id,
+          title: newCard.title,
           text: newCard.text,
           tags: newCard.tags.map((t) => t.id),
         },
@@ -56,6 +58,7 @@
           ...allCards,
           {
             id: record.id,
+            title: record.title,
             text: record.text,
             tags: record.expand.tags.map(
               (t: { id: string; tag: string; color: string }) => {
@@ -75,12 +78,9 @@
     console.log("updating card " + allCards[cardKey].id ?? "(new card)");
     pb.collection("items")
       .update(allCards[cardKey].id, {
+        title: allCards[cardKey].title,
         text: allCards[cardKey].text,
         tags: allCards[cardKey].tags.map((t) => t.id),
-      })
-      .then((record) => {
-        console.log(record.text);
-        console.log(record.tags);
       })
       .catch((err) => console.error(err));
   }
@@ -92,6 +92,7 @@
         newCardTag = { id: record.id, tag: record.tag, color: record.color };
         newCard = {
           id: "",
+          title: "",
           text: "",
           tags: [newCardTag],
         };
@@ -135,6 +136,7 @@
   let prevExpandedCardKey: number = null;
   let newCard: Item = {
     id: "",
+    title: "",
     text: "",
     tags: [newCardTag],
   };
@@ -146,6 +148,7 @@
         createCardFromNewCard();
         newCard = {
           id: "",
+          title: "",
           text: "",
           tags: [newCardTag],
         };

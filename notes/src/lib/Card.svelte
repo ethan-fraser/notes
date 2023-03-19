@@ -19,10 +19,15 @@
     >
       <i class="fa-solid fa-x" />
     </span>
-    <input type="text" placeholder="Title" class="titleInput" />
     <div class="tagSelector">
       <TagView bind:selectedTags={card.tags} requiredTag="card" />
     </div>
+    <input
+      type="text"
+      placeholder="Title"
+      class="titleInput"
+      bind:value={card.title}
+    />
     <div class="textAreaWrapper">
       <textarea bind:value={card.text} placeholder="Take a note..." />
     </div>
@@ -93,7 +98,7 @@
     font-weight: 700;
     width: 100%;
     height: 1.5em;
-    margin-bottom: 0.2em;
+    margin-top: 1rem;
     outline: none;
     border: none;
     background-color: transparent;
@@ -111,7 +116,7 @@
     border: none;
     background-color: inherit;
     resize: none;
-    margin-top: 1rem;
+    margin-top: 0.2rem;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-size: 1em;
     line-height: 1.5;
