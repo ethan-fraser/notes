@@ -1,16 +1,36 @@
 <script lang="ts">
+  import type { Tag } from "./data-model";
+  import { pb } from "./pocketbase";
   import TagCreator from "./TagCreator.svelte";
 
-  export let selectedTags: { tag: string; color: string }[];
+  export let selectedTags: Tag[];
+
+  function getAllTags() {
+    pb.collection("tags")
+      .getFullList()
+      .then((tags) => {
+        allTags = tags.map((t) => {
+          return {
+            id: t.id,
+            tag: t.tag,
+            color: t.color,
+          };
+        });
+      })
+      .catch((err) => console.error(err));
+  }
 
   let showTagCreator = false;
+  let allTags: Tag[] = [];
+
+  getAllTags();
 </script>
 
 <div class="tagSelector">
   {#each selectedTags as t}
     <span class="selectedTag" style="background-color: {t.color}">
       {t.tag}
-      {#if t.tag !== "card"}<i class="fa-solid fa-x removeTagButton" />{/if}
+      <!-- {#if t.tag !== "card"}<i class="fa-solid fa-x removeTagButton" />{/if} -->
     </span>
   {/each}
   <div
@@ -23,6 +43,8 @@
     {#if showTagCreator}
       <TagCreator
         newTag={{ id: "", tag: "", color: "" }}
+        {allTags}
+        {selectedTags}
         hide={() => (showTagCreator = false)}
       />
     {:else}

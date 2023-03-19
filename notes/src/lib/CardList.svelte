@@ -22,12 +22,15 @@
             return {
               id: item.id,
               text: item.text,
-              tags: item.expand.tags.map((t: { tag: any; color: any }) => {
-                return {
-                  tag: t.tag,
-                  color: t.color,
-                };
-              }),
+              tags: item.expand.tags.map(
+                (t: { id: string; tag: string; color: string }) => {
+                  return {
+                    id: t.id,
+                    tag: t.tag,
+                    color: t.color,
+                  };
+                }
+              ),
             };
           }))
       )
