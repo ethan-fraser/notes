@@ -71,9 +71,7 @@
       <i
         class="fa-solid fa-plus"
         on:click={() => (showTagCreator = true)}
-        on:keypress={(e) => {
-          if (e.code === "Space") showTagCreator = true;
-        }}
+        on:keydown={() => (showTagCreator = true)}
       />
     {/if}
   </div>

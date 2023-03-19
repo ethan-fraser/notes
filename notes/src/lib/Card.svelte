@@ -14,9 +14,7 @@
   <div class="card expanded">
     <span
       on:click={() => expand(key)}
-      on:keypress={(e) => {
-        if (e.code === "Space") expand(key);
-      }}
+      on:keydown={() => expand(key)}
       class="closeButton"
     >
       <i class="fa-solid fa-x" />
@@ -31,21 +29,13 @@
 {:else if isNewCard}
   <div
     on:click={() => expand(key)}
-    on:keypress={(e) => {
-      if (e.code === "Space") expand(key);
-    }}
+    on:keydown={() => expand(key)}
     class="card newCard"
   >
     <i class="fa-solid fa-plus" />
   </div>
 {:else}
-  <div
-    on:click={() => expand(key)}
-    on:keypress={(e) => {
-      if (e.code === "Space") expand(key);
-    }}
-    class="card"
-  >
+  <div on:click={() => expand(key)} on:keydown={() => expand(key)} class="card">
     <TagPreview tags={card.tags} />
     <div class="cardText">{card.text}</div>
   </div>

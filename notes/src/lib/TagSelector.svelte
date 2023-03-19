@@ -49,9 +49,7 @@
             ? '3px solid white'
             : 'none'}"
           on:click={() => (newTag.color = color)}
-          on:keypress={(e) => {
-            if (e.code === "Space") newTag.color = color;
-          }}
+          on:keydown={() => (newTag.color = color)}
         />
       {/each}
     </div>
