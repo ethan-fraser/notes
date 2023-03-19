@@ -114,11 +114,6 @@
             hide();
           });
         } else {
-          console.log(
-            checkedTags
-              .filter((tag) => tag.checked)
-              .map((tag) => allTags.find((t) => t.id === tag.id))
-          );
           selectedTags = checkedTags
             .filter((tag) => tag.checked)
             .map((tag) => allTags.find((t) => t.id === tag.id));

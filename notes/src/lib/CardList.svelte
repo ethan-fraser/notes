@@ -39,16 +39,29 @@
 
   function createCardFromNewCard() {
     pb.collection("items")
-      .create({
-        user: $currentUser.id,
-        text: newCard.text,
-        tags: newCardTag.id,
-      })
+      .create(
+        {
+          user: $currentUser.id,
+          text: newCard.text,
+          tags: newCard.tags.map((t) => t.id),
+        },
+        {
+          expand: "tags",
+        }
+      )
       .then((record) => {
         console.log("created card " + record.id);
         allCards = [
           ...allCards,
-          { id: record.id, text: record.text, tags: [newCardTag] },
+          {
+            id: record.id,
+            text: record.text,
+            tags: record.expand.tags.map(
+              (t: { id: string; tag: string; color: string }) => {
+                return { id: t.id, tag: t.tag, color: t.color };
+              }
+            ),
+          },
         ];
       })
       .catch((err) => {
@@ -58,7 +71,7 @@
   }
 
   function updateCard(cardKey: number | null) {
-    console.log("updating card " + allCards[cardKey].id);
+    console.log("updating card " + allCards[cardKey].id ?? "(new card)");
     pb.collection("items")
       .update(allCards[cardKey].id, {
         text: allCards[cardKey].text,
@@ -99,13 +112,22 @@
   let selectedCard: any;
   let selectedCardKey: number = null;
   let prevSelectedCardKey: number = null;
-  let newCard: Item = null;
+  let newCard: Item = {
+    id: "",
+    text: "",
+    tags: [newCardTag],
+  };
 
   $: if (selectedCardKey !== prevSelectedCardKey) {
     if (selectedCardKey === null && prevSelectedCardKey !== null) {
       if (prevSelectedCardKey === newCardKey && newCard.text) {
         createCardFromNewCard();
-      } else {
+        newCard = {
+          id: "",
+          text: "",
+          tags: [newCardTag],
+        };
+      } else if (prevSelectedCardKey < allCards.length) {
         updateCard(prevSelectedCardKey);
       }
     }
@@ -133,12 +155,7 @@
     {#each allCards as card, index}
       <Card key={index} {card} {setSelected} />
     {/each}
-    <Card
-      key={newCardKey}
-      card={{ id: null, text: "", tags: [newCardTag] }}
-      isNewCard={true}
-      {setSelected}
-    />
+    <Card key={newCardKey} card={newCard} isNewCard={true} {setSelected} />
   {/if}
 </section>
 
