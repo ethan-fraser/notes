@@ -193,11 +193,13 @@
   getCards();
 </script>
 
-<FilterSortSearch
-  getItems={getCards}
-  allItems={allCards}
-  requiredTag={"card"}
-/>
+{#if expandedCardKey === null}
+  <FilterSortSearch
+    getItems={getCards}
+    allItems={allCards}
+    requiredTag={"card"}
+  />
+{/if}
 <section
   class={expandedCardKey === null ? "cardSection" : "expandedCardWrapper"}
 >
