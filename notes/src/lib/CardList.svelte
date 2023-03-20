@@ -17,7 +17,7 @@
     return await pb
       .collection("items")
       .getFullList({
-        sort: sort ?? "created",
+        sort: sort ?? "-updated",
         expand: "tags",
         filter: filterExpression,
       })

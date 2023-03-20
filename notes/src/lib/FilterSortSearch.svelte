@@ -2,6 +2,14 @@
   import { pb } from "./pocketbase";
   import type { Item, Tag } from "./data-model";
 
+  // order: true = newest/A first
+  // order: false = oldest/Z first
+  type SortOption = {
+    by: string;
+    type: "numeric" | "alphabetic";
+    order: boolean;
+  };
+
   export let allItems: Item[];
   export let getItems: (
     search?: string,
@@ -26,6 +34,33 @@
       .catch((err) => console.error(err));
   }
 
+  function handleSortButtonClicked(sortOption: SortOption) {
+    if (selectedSortOption.by === sortOption.by) {
+      selectedSortOption.order = !selectedSortOption.order;
+    } else {
+      selectedSortOption = sortOption;
+    }
+    sortExp = "";
+    switch (selectedSortOption.by) {
+      case "Edited":
+        sortExp = "updated";
+        break;
+      case "Title":
+        sortExp = "title";
+        break;
+      case "Text":
+        sortExp = "text";
+        break;
+      case "Created":
+      default:
+        sortExp = "created";
+    }
+    if (!selectedSortOption.order) {
+      sortExp = "-" + sortExp;
+    }
+    getItems(searchExp, sortExp, filterExp);
+  }
+
   let allTags: Tag[] = [];
 
   let showFilter: boolean;
@@ -46,14 +81,45 @@
       filterExp += `tags~'${tagID}'`;
     }
   }
-
   getAllTags();
+
+  let sortOptions: SortOption[] = [
+    {
+      by: "Edited",
+      type: "numeric",
+      order: true,
+    },
+    {
+      by: "Created",
+      type: "numeric",
+      order: true,
+    },
+    {
+      by: "Title",
+      type: "alphabetic",
+      order: true,
+    },
+    {
+      by: "Text",
+      type: "alphabetic",
+      order: true,
+    },
+  ];
+  let selectedSortOption: SortOption = {
+    by: "Edited",
+    type: "numeric",
+    order: false,
+  };
 </script>
 
 <div class="filterSortSearchDiv">
   <div class="filter">
-    <button on:click={() => (showFilter = !showFilter)}
-      ><i class="fa-solid fa-filter" /> Filter</button
+    <button
+      on:click={() => {
+        showFilter = !showFilter;
+        showSort = false;
+        showSearch = false;
+      }}><i class="fa-solid fa-filter" /> Filter</button
     >
     {#if showFilter}
       <div class="filterSelector">
@@ -78,8 +144,54 @@
       </div>
     {/if}
   </div>
-  <div><button><i class="fa-solid fa-sort" /> Sort</button></div>
-  <div><button><i class="fa-solid fa-search" /> Search</button></div>
+  <div class="sort">
+    <button
+      on:click={() => {
+        showFilter = false;
+        showSort = !showSort;
+        showSearch = false;
+      }}><i class="fa-solid fa-sort" /> Sort</button
+    >
+    {#if showSort}
+      <div class="sortSelector">
+        {#each sortOptions as sortOption}
+          <div
+            class="sortOption"
+            on:click={() => handleSortButtonClicked(sortOption)}
+            on:keydown={() => handleSortButtonClicked(sortOption)}
+          >
+            {#if selectedSortOption.by === sortOption.by}
+              {#if selectedSortOption.order}
+                <i
+                  class={`fa-solid ${
+                    sortOption.type === "numeric"
+                      ? "fa-sort-down"
+                      : "fa-arrow-down-a-z"
+                  }`}
+                />
+              {:else}
+                <i
+                  class={`fa-solid ${
+                    sortOption.type === "numeric"
+                      ? "fa-sort-up"
+                      : "fa-arrow-up-a-z"
+                  }`}
+                />
+              {/if}
+            {/if}
+            <span
+              class={selectedSortOption.by === sortOption.by
+                ? "selectedOptionLabel"
+                : "optionLabel"}>{sortOption.by}</span
+            >
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </div>
+  <div class="search">
+    <button><i class="fa-solid fa-search" /> Search</button>
+  </div>
 </div>
 
 <style>
@@ -90,11 +202,14 @@
     margin-top: 1em;
   }
 
-  .filter {
+  .filter,
+  .sort,
+  .search {
     position: relative;
   }
 
-  .filterSelector {
+  .filterSelector,
+  .sortSelector {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -104,6 +219,11 @@
     border-radius: 5px;
     padding: 1em;
     z-index: 1;
+  }
+
+  .sortSelector {
+    width: 100px;
+    transform: translateX(-25px);
   }
 
   .tagCheckbox {
@@ -120,5 +240,24 @@
     white-space: nowrap;
     color: #242424;
     margin-right: 0.5em;
+  }
+
+  .sortOption {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+  }
+
+  .optionLabel {
+    padding-left: 1em;
+  }
+
+  .selectedOptionLabel {
+    padding-left: 0;
+    margin-left: 0.1em;
+  }
+
+  .fa-sort-up {
+    margin-top: 0.5em;
   }
 </style>
