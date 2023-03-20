@@ -3,14 +3,23 @@
   import { currentUser, pb } from "./pocketbase";
   import Card from "./Card.svelte";
   import type { Item, Tag } from "./data-model";
-  import { select_multiple_value } from "svelte/internal";
+  import FilterSortSearch from "./FilterSortSearch.svelte";
 
-  async function getCards() {
+  async function getCards(filter?: string, sort?: string, search?: string) {
+    let filterExpression = "";
+    if (filter && search) {
+      filterExpression = filterExpression + " && " + search;
+    } else if (filter) {
+      filterExpression = filter;
+    } else if (search) {
+      filterExpression = search;
+    }
     return await pb
       .collection("items")
       .getFullList({
-        sort: "created",
+        sort: sort ?? "created",
         expand: "tags",
+        filter: filterExpression,
       })
       .then((data) =>
         data.filter((record) => {
@@ -184,6 +193,11 @@
   getCards();
 </script>
 
+<FilterSortSearch
+  getItems={getCards}
+  allItems={allCards}
+  requiredTag={"card"}
+/>
 <section
   class={expandedCardKey === null ? "cardSection" : "expandedCardWrapper"}
 >
