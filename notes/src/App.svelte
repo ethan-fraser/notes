@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Login from "./lib/Login.svelte";
   import { currentUser } from "./lib/pocketbase";
+  import Login from "./lib/Login.svelte";
+  import CardList from "./lib/CardList.svelte";
 </script>
 
 {#if $currentUser}
@@ -8,6 +9,7 @@
     <h1>Notes</h1>
     <Login />
   </header>
+  <CardList />
 {:else}
   <div class="login">
     <h1>Notes</h1>
