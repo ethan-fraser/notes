@@ -10,7 +10,6 @@
     order: boolean;
   };
 
-  export let allItems: Item[];
   export let getItems: (
     search?: string,
     sort?: string,
