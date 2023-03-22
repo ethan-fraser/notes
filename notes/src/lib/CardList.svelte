@@ -8,7 +8,7 @@
   async function getCards(filter?: string, sort?: string, search?: string) {
     let filterExpression = "";
     if (filter && search) {
-      filterExpression = filterExpression + " && " + search;
+      filterExpression = filter + " && " + search;
     } else if (filter) {
       filterExpression = filter;
     } else if (search) {

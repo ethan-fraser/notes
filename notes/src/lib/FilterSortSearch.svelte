@@ -109,6 +109,8 @@
     type: "numeric",
     order: false,
   };
+
+  let searchInputText: string = "";
 </script>
 
 <div class="filterSortSearchDiv">
@@ -189,7 +191,29 @@
     {/if}
   </div>
   <div class="search">
-    <button><i class="fa-solid fa-search" /> Search</button>
+    <button
+      on:click={() => {
+        showFilter = false;
+        showSort = false;
+        showSearch = !showSearch;
+      }}><i class="fa-solid fa-search" /> Search</button
+    >
+    {#if showSearch}
+      <div class="searchSelector">
+        <input
+          type="text"
+          placeholder="Search..."
+          class="searchInput"
+          bind:value={searchInputText}
+          on:change={() => {
+            searchExp = `title~'${searchInputText}' || text~'${searchInputText}'`;
+          }}
+        />
+        <button on:click={() => getItems(searchExp, sortExp, filterExp)}
+          >Go</button
+        >
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -208,7 +232,8 @@
   }
 
   .filterSelector,
-  .sortSelector {
+  .sortSelector,
+  .searchSelector {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -223,6 +248,13 @@
   .sortSelector {
     width: 100px;
     transform: translateX(-25px);
+  }
+
+  .searchSelector {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
   }
 
   .tagCheckbox {
